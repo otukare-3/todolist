@@ -1,0 +1,33 @@
+body {
+    font-family: sans-serif;
+}
+
+#input-area {
+    margin-bottom: 10px;
+}
+
+#task-list {
+    list-style: none;
+    padding: 0;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.task-item.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.task-item input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.task-item button {
+    margin-left: auto;
+}
