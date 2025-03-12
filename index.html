@@ -8,9 +8,20 @@
 
 <body>
     <h1>ToDo リスト</h1>
-    <div>
+    <div id="input-area">
         <input type="text" id="task-input" placeholder="タスクを入力してください">
         <button id="add-button">追加</button>
+        <div id="filter-area">
+            <label>
+                <input type="radio" name="filter" value="all" checked>すべて
+            </label>
+            <label>
+                <input type="radio" name="filter" value="active" checked>未完了
+            </label>
+            <label>
+                <input type="radio" name="filter" value="completed" checked>完了済
+            </label>
+        </div>
     </div>
     <ul id="task-list"></ul>
     <script src="script.js"></script>

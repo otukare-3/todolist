@@ -1,8 +1,10 @@
 const taskInput = document.getElementById("task-input");
 const addButton = document.getElementById("add-button");
 const taskList = document.getElementById("task-list");
+const filterRadios = document.querySelectorAll('input[name="filter"]');
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let filter = "all";
 
 /**
  * タスクのリストをDOMにレンダリングします。
@@ -13,6 +15,9 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 function renderTask() {
   taskList.innerHTML = "";
   tasks.forEach((task, index) => {
+    if (filter === "active" && task.completed) return;
+    if (filter === "completed" && !task.completed) return;
+
     const listItem = document.createElement("li");
     listItem.classList.add("task-item");
     if (task.completed) {
@@ -85,6 +90,13 @@ taskList.addEventListener("click", (event) => {
       renderTask();
     }
   }
+});
+
+filterRadios.forEach((radio) => {
+  radio.addEventListener("change", (event) => {
+    filter = event.target.value;
+    renderTask();
+  });
 });
 
 renderTask();
