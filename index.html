@@ -10,16 +10,37 @@
     <h1>ToDo リスト</h1>
     <div id="input-area">
         <input type="text" id="task-input" placeholder="タスクを入力してください">
+        <input type="datetime-local" id="deadline-input">
+        <select id="category-select">
+            <option value="仕事">仕事</option>
+            <option value="プライベート">プライベート</option>
+            <option value="その他">その他</option>
+        </select>
         <button id="add-button">追加</button>
         <div id="filter-area">
+            <h2>フィルター</h2>
+            <h3>ステータス</h3>
             <label>
-                <input type="radio" name="filter" value="all" checked>すべて
+                <input type="radio" name="status-filter" value="all" checked>すべて
             </label>
             <label>
-                <input type="radio" name="filter" value="active" checked>未完了
+                <input type="radio" name="status-filter" value="active">未完了
             </label>
             <label>
-                <input type="radio" name="filter" value="completed" checked>完了済
+                <input type="radio" name="status-filter" value="completed">完了済
+            </label>
+            <h3>カテゴリー</h3>
+            <label>
+                <input type="radio" name="category-filter" value="all" checked>すべて
+            </label>
+            <label>
+                <input type="radio" name="category-filter" value="仕事">仕事
+            </label>
+            <label>
+                <input type="radio" name="category-filter" value="プライベート">プライベート
+            </label>
+            <label>
+                <input type="radio" name="category-filter" value="その他">その他
             </label>
         </div>
     </div>

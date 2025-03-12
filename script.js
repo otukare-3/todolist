@@ -1,10 +1,18 @@
 const taskInput = document.getElementById("task-input");
 const addButton = document.getElementById("add-button");
 const taskList = document.getElementById("task-list");
-const filterRadios = document.querySelectorAll('input[name="filter"]');
+const statusFilterRadios = document.querySelectorAll(
+  'input[name="status-filter"]'
+);
+const categoryFilterRadios = document.querySelectorAll(
+  'input[name="category-filter"]'
+);
+const categorySelect = document.getElementById("category-select");
+const deadlineInput = document.getElementById("deadline-input");
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-let filter = "all";
+let statusFilter = "all";
+let categoryFilter = "all";
 
 /**
  * タスクのリストをDOMにレンダリングします。
@@ -15,8 +23,9 @@ let filter = "all";
 function renderTask() {
   taskList.innerHTML = "";
   tasks.forEach((task, index) => {
-    if (filter === "active" && task.completed) return;
-    if (filter === "completed" && !task.completed) return;
+    if (statusFilter === "active" && task.completed) return;
+    if (statusFilter === "completed" && !task.completed) return;
+    if (categoryFilter !== "all" && task.category !== categoryFilter) return;
 
     const listItem = document.createElement("li");
     listItem.classList.add("task-item");
@@ -25,7 +34,9 @@ function renderTask() {
     }
     listItem.innerHTML = `
       <input type="checkbox" ${task.completed ? "checked" : ""} />
-      <span>${task.text}</span>
+      <p>[${task.category}]</p>
+      <p>${task.text}</p>
+      <p>(締切: ${task.deadline})</p>
       <button class="edit-button" data-index="${index}">編集</button>
       <button class="delete-button" data-index="${index}">削除</button>
     `;
@@ -46,8 +57,15 @@ function saveTasks() {
  */
 addButton.addEventListener("click", () => {
   const taskText = taskInput.value.trim();
-  if (taskText) {
-    tasks.push({ text: taskText, completed: false });
+  const category = categorySelect.value;
+  const deadline = deadlineInput.value;
+  if (taskText && category) {
+    tasks.push({
+      text: taskText,
+      completed: false,
+      category: category,
+      deadline: deadline,
+    });
     taskInput.value = "";
     saveTasks();
     renderTask();
@@ -92,11 +110,34 @@ taskList.addEventListener("click", (event) => {
   }
 });
 
-filterRadios.forEach((radio) => {
+statusFilterRadios.forEach((radio) => {
   radio.addEventListener("change", (event) => {
-    filter = event.target.value;
+    statusFilter = event.target.value;
+    renderTask();
+  });
+});
+
+categoryFilterRadios.forEach((radio) => {
+  radio.addEventListener("change", (event) => {
+    categoryFilter = event.target.value;
     renderTask();
   });
 });
 
 renderTask();
+
+function checkDeadlines() {
+  const now = new Date();
+  tasks.forEach((task) => {
+    if (task.deadline && !task.completed) {
+      const deadline = new Date(task.deadline);
+      const diff = deadline.getTime() - now.getTime();
+      const oneHour = 1000 * 60 * 60;
+      if (diff > 0 && diff < oneHour) {
+        alert(`締切が迫っています！[${task.text}]`);
+      }
+    }
+  });
+}
+
+setInterval(checkDeadlines, 1000 * 60);
