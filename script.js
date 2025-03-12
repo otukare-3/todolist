@@ -42,6 +42,16 @@ function renderTask() {
     `;
     taskList.appendChild(listItem);
   });
+
+  Sortable.create(taskList, {
+    onUpdate: (event) => {
+      const newIndex = event.newIndex;
+      const oldIndex = event.oldIndex;
+      const movedTask = tasks.splice(oldIndex, 1)[0];
+      tasks.splice(newIndex, 0, movedTask);
+      saveTasks();
+    },
+  });
 }
 
 /**
